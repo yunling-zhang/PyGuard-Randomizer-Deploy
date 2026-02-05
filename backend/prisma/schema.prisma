@@ -1,0 +1,39 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TeamStatus {
+  UNPRESENTED
+  CURRENTLY_SELECTED
+  PRESENTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String   // hashed password
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Team {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  members   String[]   // Array of member names
+  status    TeamStatus @default(UNPRESENTED)
+  active    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("teams")
+}
